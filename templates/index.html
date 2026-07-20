@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TubeGrab — YouTube Video Downloader</title>
+  <meta name="description" content="Professional YouTube video and audio downloader. Download videos in MP4/MP3 format with quality selection and playlist support." />
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📥</text></svg>" />
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- ─── Navigation ─────────────────────────────────────────────── -->
+    <nav class="nav">
+      <div class="nav-brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <h1>TubeGrab</h1>
+        <span>v1.0</span>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+          <!-- Sun icon (shown in dark mode) -->
+          <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <!-- Moon icon (shown in light mode) -->
+          <svg id="icon-moon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ─── Main Layout ────────────────────────────────────────────── -->
+    <div class="main">
+
+      <!-- Left: Input + Content -->
+      <div class="main-panel">
+        <div class="section-header">
+          <div class="section-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z"/></svg>
+            Download
+          </div>
+        </div>
+
+        <!-- URL Input -->
+        <div class="url-input-group">
+          <input
+            type="text"
+            id="url-input"
+            class="url-input"
+            placeholder="Paste YouTube URL here..."
+            spellcheck="false"
+            autocomplete="off"
+          />
+          <button class="btn btn-primary" id="fetch-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            Fetch Info
+          </button>
+        </div>
+
+        <!-- Dynamic Content Area (Video Card / Playlist / Placeholder) -->
+        <div id="content-area">
+          <div class="fetch-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/>
+            </svg>
+            <h3>Paste a YouTube URL to get started</h3>
+            <p>Supports single videos and playlists. Choose your format and quality, then add to the download queue.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Queue Panel -->
+      <div class="queue-panel">
+        <div class="section-header">
+          <div class="section-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+            Queue
+            <span class="count" id="queue-count">0</span>
+          </div>
+          <div class="queue-actions">
+            <button class="btn btn-secondary btn-sm" id="clear-completed-btn">Clear Done</button>
+            <button class="btn btn-danger btn-sm" id="cancel-all-btn">Cancel All</button>
+          </div>
+        </div>
+
+        <div class="queue-card">
+          <div id="queue-list">
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+              </svg>
+              <p>No downloads in queue.<br/>Paste a URL above to get started.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── Footer ─────────────────────────────────────────────────── -->
+    <footer class="footer">
+      TubeGrab is for personal use only. Downloading copyrighted content without permission may violate YouTube's Terms of Service.
+    </footer>
+
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
