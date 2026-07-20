@@ -12,8 +12,10 @@ import queue
 from datetime import datetime
 from flask import Flask, request, jsonify, send_file, Response, render_template
 from flask_cors import CORS
+from whitenoise import WhiteNoise
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
+app.wsgi_app = WhiteNoise(app.wsgi_app, root='static/', prefix='static/')
 CORS(app)
 
 # ---------------------------------------------------------------------------
