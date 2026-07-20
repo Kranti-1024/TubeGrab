@@ -139,6 +139,7 @@ def _execute_download(task):
             'progress_hooks': [progress_hook],
             'quiet': True,
             'no_warnings': True,
+            'extractor_args': {'youtube': ['player_client=android']}
         }
     else:
         # MP4 with quality selection
@@ -156,6 +157,7 @@ def _execute_download(task):
             'progress_hooks': [progress_hook],
             'quiet': True,
             'no_warnings': True,
+            'extractor_args': {'youtube': ['player_client=android']}
         }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -211,6 +213,7 @@ def get_video_info():
         'no_warnings': True,
         'extract_flat': 'in_playlist',
         'skip_download': True,
+        'extractor_args': {'youtube': ['player_client=android']}
     }
 
     try:
@@ -247,6 +250,7 @@ def get_video_info():
                 'quiet': True,
                 'no_warnings': True,
                 'skip_download': True,
+                'extractor_args': {'youtube': ['player_client=android']}
             }
             with yt_dlp.YoutubeDL(ydl_opts_full) as ydl:
                 full_info = ydl.extract_info(url, download=False)
